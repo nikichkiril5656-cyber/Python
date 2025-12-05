@@ -1,0 +1,170 @@
+def get_positive_int_input(prompt, max_value=None):
+    """
+    Функция для получения положительного целого числа от пользователя.
+    
+    Args:
+        prompt (str): Сообщение для пользователя
+        max_value (int, optional): Максимальное допустимое значение
+    
+    Returns:
+        int: Введенное пользователем число
+    """
+    while True:
+        try:
+            value = int(input(prompt))
+            if value <= 0:
+                print("Ошибка: число должно быть положительным.")
+                continue
+            if max_value and value > max_value:
+                print(f"Ошибка: число не должно превышать {max_value}.")
+                continue
+            return value
+        except ValueError:
+            print("Ошибка: пожалуйста, введите целое число.")
+
+
+def get_positive_float_input(prompt):
+    """
+    Функция для получения положительного дробного числа от пользователя.
+    
+    Args:
+        prompt (str): Сообщение для пользователя
+    
+    Returns:
+        float: Введенное пользователем число
+    """
+    while True:
+        try:
+            value = float(input(prompt))
+            if value < 0:
+                print("Ошибка: число не может быть отрицательным.")
+                continue
+            return value
+        except ValueError:
+            print("Ошибка: пожалуйста, введите число.")
+
+
+def collect_study_data():
+    """
+    Собирает данные об учебе за неделю.
+    
+    Returns:
+        tuple: (количество_дней, список_часов)
+    """
+    # Словарь с днями недели для красивого вывода
+    days_dict = {
+        1: "Понедельник",
+        2: "Вторник", 
+        3: "Среда",
+        4: "Четверг",
+        5: "Пятница",
+        6: "Суббота",
+        7: "Воскресенье"
+    }
+    
+    print("=== Учет времени учебы за неделю ===")
+    
+    # Получаем количество учебных дней
+    days_count = get_positive_int_input(
+        "Введите количество учебных дней (от 1 до 7): ", 
+        7
+    )
+    
+    # Список для хранения часов учебы
+    hours_list = []
+    
+    print(f"\nВведите количество часов учебы для каждого дня:")
+    
+    # Собираем данные по каждому дню
+    for day_num in range(1, days_count + 1):
+        day_name = days_dict.get(day_num, f"День {day_num}")
+        prompt = f"{day_name}: количество часов = "
+        
+        hours = get_positive_float_input(prompt)
+        hours_list.append(hours)
+    
+    # Возвращаем кортеж: (количество дней, список часов)
+    return (days_count, hours_list)
+
+
+def calculate_statistics(days_count, hours_list):
+    """
+    Рассчитывает статистику по учебным часам.
+    
+    Args:
+        days_count (int): Количество учебных дней
+        hours_list (list): Список часов по дням
+    
+    Returns:
+        dict: Словарь со статистикой
+    """
+    # Вычисляем общую сумму
+    total_hours = 0.0
+    for hours in hours_list:
+        total_hours += hours
+    
+    # Рассчитываем среднее значение
+    average_hours = total_hours / days_count if days_count > 0 else 0
+    
+    # Создаем словарь со статистикой
+    stats = {
+        'total': total_hours,
+        'average': average_hours,
+        'days_count': days_count,
+        'max_hours': max(hours_list) if hours_list else 0,
+        'min_hours': min(hours_list) if hours_list else 0
+    }
+    
+    return stats
+
+
+def print_results(days_count, hours_list, stats):
+    """
+    Выводит результаты учета времени учебы.
+    
+    Args:
+        days_count (int): Количество учебных дней
+        hours_list (list): Список часов по дням
+        stats (dict): Словарь со статистикой
+    """
+    print("\n" + "="*50)
+    print("РЕЗУЛЬТАТЫ УЧЕТА ВРЕМЕНИ УЧЕБЫ")
+    print("="*50)
+    
+    # Выводим данные по дням
+    print("\nЧасы учебы по дням:")
+    for i in range(days_count):
+        print(f"  День {i+1}: {hours_list[i]:.1f} часов")
+    
+    print("\n" + "-"*50)
+    
+    # Выводим статистику
+    print("СТАТИСТИКА:")
+    print(f"  Всего учебных дней: {stats['days_count']}")
+    print(f"  Общее время учебы: {stats['total']:.1f} часов")
+    print(f"  Среднее в день: {stats['average']:.1f} часов")
+    print(f"  Максимально в день: {stats['max_hours']:.1f} часов")
+    print(f"  Минимально в день: {stats['min_hours']:.1f} часов")
+    
+    print("="*50)
+
+
+def main():
+    """
+    Основная функция программы.
+    """
+    # Сбор данных об учебе
+    study_data = collect_study_data()  # Возвращает кортеж
+    days_count = study_data[0]  # Первый элемент кортежа
+    hours_list = study_data[1]  # Второй элемент кортежа
+    
+    # Расчет статистики
+    stats = calculate_statistics(days_count, hours_list)
+    
+    # Вывод результатов
+    print_results(days_count, hours_list, stats)
+
+
+# Запуск программы
+if __name__ == "__main__":
+    main()
