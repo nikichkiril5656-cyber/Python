@@ -1,0 +1,21 @@
+math_students={"Анна","Борис","Виктор","Дарья","Елена"}
+physics_students={"Виктор","Георгий","Дарья","Иван","Ксения"}
+cs_students={"Анна","Виктор","Елена","Иван","Мария"}
+
+
+all_courses=math_students.intersection(physics_students).intersection(cs_students)
+print(f"Студенты которые ходят на все три курса: {all_courses}")
+
+only_math=math_students.difference(physics_students.union(cs_students))
+print(f"Студенты которые ходят только на математику: {only_math}")
+
+all_unique_students=math_students.union(physics_students).union(cs_students)
+print(f"Все уникльные студенты: {all_unique_students}")
+
+math_physics=math_students.intersection(physics_students)
+math_cs=math_students.intersection(cs_students)
+cs_physics=cs_students.intersection(physics_students)
+two_courses=math_physics.union(cs_physics).union(math_cs)
+exactly_two_courses=two_courses.difference(all_courses)
+
+print(f"Студенты которые ходят только на два курса: {exactly_two_courses}")
